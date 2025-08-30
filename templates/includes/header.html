@@ -1,1 +1,40 @@
 {% load static %}
+<div class="justify-content-center align-items-center d-flex my-4 sticky-top z-5">
+    <div class="d-flex justify-content-center align-items-center shadow-sm rounded-5 gap-5 py-3 px-4 border bg-white">
+        <div>
+            <a hx-get="{% url 'core:home' %}" hx-target="#content" hx-push-url="true"><img src="{% static 'images/flavor.png' %}" width="55" alt=""></a>
+        </div>
+        
+        <div>
+            <button class="border-0 bg-white position-relative"  
+                    data-bs-toggle="offcanvas" 
+                    data-bs-target="#offcanvasRight" 
+                    aria-controls="offcanvasRight">
+                <img src="{% static 'images/cart.png' %}" alt="Cart" width="35">
+
+                <!-- Cart item count badge -->
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    0
+                    <span class="visually-hidden">items in cart</span>
+                </span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                ...
+            </div>
+            </div>
+        </div>
+
+        <div>
+            <a hx-get="{% url 'core:order-history' %}" hx-target="#content" hx-push-url="true"><img src="{% static 'images/orders.png' %}" width="35" alt=""></a>
+        </div>
+        
+        <div>
+            <a href="#"><img src="{% static 'images/user-profile.png' %}" width="40" alt=""></a>
+        </div>
+    </div>
+</div>

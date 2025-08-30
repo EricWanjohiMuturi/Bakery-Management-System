@@ -1,16 +1,18 @@
 {% load static %}
+{% load django_htmx %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% enblock title %}</title>
+    <title>{% block title %}Flavor Haven{% endblock title %}</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'src/main.css' %}">
 
     <!-- JS -->
-    <script src="{% static 'js/alpine.js' %}" ></script>
+     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="{% static 'js/store.js' %}" ></script>
     <script src="{% static 'js/htmx.js' %}" ></script>
 
     <!-- bootstrap -->
@@ -27,6 +29,9 @@
 
 </head>
 <body>
-    
+    {% include 'includes/header.html' %}
+    <main id="content" class="container px-1">
+        {% block content %}{% endblock %}
+    </main>    
 </body>
 </html>

@@ -1,3 +1,29 @@
-from django.shortcuts import render
+from django.shortcuts import render #type: ignore
+from django.http import JsonResponse 
+from products.models import product
 
 # Create your views here.
+def pos(request):
+    if request.htmx:
+        return render(request, 'partials/products.html')
+    return render(request, 'views/pos.html')
+
+def products_api(request):
+    products = product.objects.filter(product_status="published")
+    data = [
+        {
+            "id": p.id,
+            "title": p.title,
+            "category": getattr(p.category, "title", None),
+            "image": getattr(p.image, "url", ""),
+            "price": str(p.price),
+            "qty": p.qty,
+        }
+        for p in products
+    ]
+    return JsonResponse(data, safe=False)
+
+def order_history(request):
+    if request.htmx:
+        return render(request, 'partials/order-table.html')
+    return render(request, 'views/orders.html')
