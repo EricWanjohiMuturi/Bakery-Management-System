@@ -1,0 +1,15 @@
+asgiref
+Django
+django-htmx
+sqlparse
+cloudinary
+django-cloudinary-storage
+pillow
+django-jazzmin
+python-dotenv
+dj_database_url
+psycopg2-binary
+pytz
+whitenoise
+gunicorn
+django_bootstrap5

@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% enblock title %}</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'src/main.css' %}">
+
+    <!-- JS -->
+    <script src="{% static 'js/alpine.js' %}" ></script>
+    <script src="{% static 'js/htmx.js' %}" ></script>
+
+    <!-- bootstrap -->
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% bootstrap_messages %}
+    {% htmx_script %}
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/brands.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/solid.min.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+    
+</body>
+</html>
