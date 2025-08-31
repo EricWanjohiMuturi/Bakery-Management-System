@@ -1,14 +1,14 @@
 document.addEventListener("alpine:init", () => {
-  // Products store
+  // PRODUCTS
   Alpine.store("products", {
     all: [],
     async fetch() {
-      let res = await fetch("/api/products/");
+      const res = await fetch("/api/products/");
       this.all = await res.json();
     },
   });
 
-  // Cart store
+  // CART (single source of truth)
   Alpine.store("cart", {
     items: JSON.parse(localStorage.getItem("cart")) || [],
 
@@ -17,41 +17,66 @@ document.addEventListener("alpine:init", () => {
     },
 
     get count() {
-      return this.items.reduce((acc, i) => acc + i.quantity, 0);
+      return this.items.reduce((n, i) => n + i.quantity, 0);
     },
 
     get total() {
-      return this.items.reduce((acc, i) => acc + i.quantity * parseFloat(i.price), 0).toFixed(2);
+      return this.items
+        .reduce((sum, i) => sum + i.quantity * parseFloat(i.price || 0), 0)
+        .toFixed(2);
+    },
+
+    getQty(id) {
+      const it = this.items.find(i => i.id === id);
+      return it ? it.quantity : 0;
     },
 
     add(product) {
-      let existing = this.items.find((i) => i.id === product.id);
-      if (existing) {
-        existing.quantity++;
+      // normalize price as number once
+      const price = parseFloat(product.price);
+      let it = this.items.find(i => i.id === product.id);
+      if (it) {
+        it.quantity++;
       } else {
-        this.items.push({ ...product, quantity: 1 });
+        this.items.push({ ...product, price, quantity: 1 });
       }
       this.save();
     },
 
-    remove(productId) {
-      this.items = this.items.filter((i) => i.id !== productId);
+    increment(id) {
+      const it = this.items.find(i => i.id === id);
+      if (it) it.quantity++;
       this.save();
     },
 
-    increment(productId) {
-      let item = this.items.find((i) => i.id === productId);
-      if (item) item.quantity++;
+    decrement(id) {
+      const it = this.items.find(i => i.id === id);
+      if (!it) return;
+      if (it.quantity > 1) it.quantity--;
+      else this.remove(id);
       this.save();
     },
 
-    decrement(productId) {
-      let item = this.items.find((i) => i.id === productId);
-      if (item && item.quantity > 1) {
-        item.quantity--;
-      } else {
-        this.remove(productId);
+    remove(id) {
+      this.items = this.items.filter(i => i.id !== id);
+      this.save();
+    },
+
+    setQty(id, qty, product = null) {
+      // optional helper if you need direct setting from inputs
+      qty = Number(qty) || 0;
+      if (qty <= 0) return this.remove(id);
+      const it = this.items.find(i => i.id === id);
+      if (it) {
+        it.quantity = qty;
+      } else if (product) {
+        this.items.push({ ...product, price: parseFloat(product.price), quantity: qty });
       }
+      this.save();
+    },
+
+    clear() {
+      this.items = [];
       this.save();
     },
   });

@@ -13,12 +13,11 @@
                 <img src="{% static 'images/cart.png' %}" alt="Cart" width="35">
 
                 <!-- Cart item count badge -->
-                <span 
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                x-data
-                x-text="$store.cart.count"
-                >
-                </span>
+                <span
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                    x-data
+                    x-text="$store.cart.count"
+                ></span>
             </button>
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
             <div class="offcanvas-header">

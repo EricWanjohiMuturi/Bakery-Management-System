@@ -19,50 +19,45 @@
         <div x-init="$store.products.fetch()" class="row g-3">
             <template x-for="product in $store.products.all" :key="product.id">
                 <div class="col-6 col-sm-6 col-md-3 col-lg-2 mb-4">
-                    <div class="card h-100 shadow border-0" x-data="{ quantity: 0, showControls: false }">
-                    <img 
-                        :src="product.image" 
-                        class="card-img-top" 
-                        :alt="product.title"
-                        style="height: 180px; object-fit: cover;" 
-                    >
-
-                    <div class="card-body text-center">
-                        <h5 class="card-title" x-text="product.title"></h5>
-                        <p>Ksh. <span x-text="product.price"></span></p>
-
-                        <!-- Add to Cart -->
-                        <template x-if="!showControls">
-                        <button 
-                            @click="quantity = 1; showControls = true; $store.cart.add(product)" 
-                            class="btn btn-primary w-100"
+                    <div class="card h-100 shadow border-0" x-data>
+                        <img
+                            :src="product.image"
+                            class="card-img-top"
+                            :alt="product.title"
+                            style="height: 180px; object-fit: cover;"
                         >
-                            Add to Cart
-                        </button>
-                        </template>
 
-                        <!-- Quantity controls -->
-                        <template x-if="showControls">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <button 
-                            @click="if(quantity > 1) { quantity--; $store.cart.decrement(product.id) } 
-                                    else { quantity = 0; showControls = false; $store.cart.decrement(product.id) }" 
-                            class="btn btn-outline-danger"
-                            >
-                            -
-                            </button>
+                        <div class="card-body text-center">
+                            <h5 class="card-title" x-text="product.title"></h5>
+                            <p>Ksh. <span x-text="product.price"></span></p>
 
-                            <span class="fw-bold" x-text="quantity"></span>
+                            <!-- Add to Cart (only when qty == 0) -->
+                            <template x-if="$store.cart.getQty(product.id) === 0">
+                                <button
+                                    @click="$store.cart.add(product)"
+                                    class="btn btn-primary w-100"
+                                >
+                                    Add to Cart
+                                </button>
+                            </template>
 
-                            <button 
-                            @click="quantity++; $store.cart.increment(product.id)" 
-                            class="btn btn-outline-success"
-                            >
-                            +
-                            </button>
+                            <!-- Quantity controls (only when qty > 0) -->
+                            <template x-if="$store.cart.getQty(product.id) > 0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button
+                                    @click="$store.cart.decrement(product.id)"
+                                    class="btn btn-outline-danger"
+                                    >-</button>
+
+                                    <span class="fw-bold" x-text="$store.cart.getQty(product.id)"></span>
+
+                                    <button
+                                    @click="$store.cart.increment(product.id)"
+                                    class="btn btn-outline-success"
+                                    >+</button>
+                                </div>
+                            </template>
                         </div>
-                        </template>
-                    </div>
                     </div>
                 </div>
             </template>
