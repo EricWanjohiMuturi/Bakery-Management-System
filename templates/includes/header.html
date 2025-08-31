@@ -21,7 +21,7 @@
             </button>
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasRightLabel">Place The Order</h5>
+                <h5 class="offcanvas-title fw-bold fs-2" id="offcanvasRightLabel">Place The Order</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body" x-data>
@@ -30,14 +30,14 @@
                 </template>
 
                 <template x-for="item in $store.cart.items" :key="item.id">
-                    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                    <div class="d-flex justify-content-between align-items-center mb-3 border shadow p-2 rounded-2">
                     <div>
-                        <h6 x-text="item.title"></h6>
+                        <h6 x-text="item.title" class="fw-bold fs-4"></h6>
                         <small>Ksh. <span x-text="item.price"></span></small>
-                        <div class="d-flex align-items-center mt-1">
-                        <button @click="$store.cart.decrement(item.id)" class="btn btn-sm btn-outline-danger">-</button>
-                        <span class="mx-2 fw-bold" x-text="item.quantity"></span>
-                        <button @click="$store.cart.increment(item.id)" class="btn btn-sm btn-outline-success">+</button>
+                        <div class="d-flex gap-5 align-items-center mt-1">
+                            <button @click="$store.cart.decrement(item.id)" class="btn btn-sm btn-outline-danger">-</button>
+                            <span class="mx-2 fw-bold" x-text="item.quantity"></span>
+                            <button @click="$store.cart.increment(item.id)" class="btn btn-sm btn-outline-success">+</button>
                         </div>
                     </div>
                     <button @click="$store.cart.remove(item.id)" class="btn btn-sm btn-outline-dark">x</button>
