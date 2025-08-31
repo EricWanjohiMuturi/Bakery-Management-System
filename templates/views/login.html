@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Login In</title>
+
+    <!-- styles -->
+    <link rel="stylesheet" href="{% static 'src/login.css' %}">
+
+    <!-- bootstrap -->
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% bootstrap_messages %}
+</head>
+<body>
+    <div class="container vh-100 d-flex justify-content-center align-items-center">
+        <div class="row">
+            <div class="align-items-center justify-content-center d-flex my-5">
+                <img src="{% static 'images/flavor.png' %}" width="200" alt="">
+            </div>
+            <div class="align-items-center justify-content-center d-flex">
+                <form class="form">
+                    <input type="text" class="input" placeholder="Enter your name">
+                    <input type="text" class="input" placeholder="Enter your email">
+                    <input type="password" class="input" placeholder="*********">
+                    <button>Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
