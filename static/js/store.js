@@ -1,10 +1,34 @@
 document.addEventListener("alpine:init", () => {
-  // PRODUCTS
+  //PRODUCTS
   Alpine.store("products", {
     all: [],
+    searchTerm: "",
+    categories: [],
+    selectedCategory: "",
+
     async fetch() {
       const res = await fetch("/api/products/");
       this.all = await res.json();
+
+      // Extract unique categories from products
+      this.categories = [...new Set(this.all.map(p => p.category))];
+    },
+
+    get filtered() {
+      let filtered = this.all;
+
+      // Apply category filter
+      if (this.selectedCategory) {
+        filtered = filtered.filter(p => p.category === this.selectedCategory);
+      }
+
+      // Apply search filter
+      if (this.searchTerm) {
+        const term = this.searchTerm.toLowerCase();
+        filtered = filtered.filter(p => p.title.toLowerCase().includes(term));
+      }
+
+      return filtered;
     },
   });
 
@@ -32,7 +56,6 @@ document.addEventListener("alpine:init", () => {
     },
 
     add(product) {
-      // normalize price as number once
       const price = parseFloat(product.price);
       let it = this.items.find(i => i.id === product.id);
       if (it) {
@@ -63,7 +86,6 @@ document.addEventListener("alpine:init", () => {
     },
 
     setQty(id, qty, product = null) {
-      // optional helper if you need direct setting from inputs
       qty = Number(qty) || 0;
       if (qty <= 0) return this.remove(id);
       const it = this.items.find(i => i.id === id);
