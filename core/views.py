@@ -1,6 +1,6 @@
 from django.shortcuts import render #type: ignore
 from django.http import JsonResponse 
-from products.models import product
+from products.models import Product
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -11,7 +11,7 @@ def pos(request):
     return render(request, 'views/pos.html')
 
 def products_api(request):
-    products = product.objects.filter(product_status="published")
+    products = Product.objects.filter(product_status="published")
     data = [
         {
             "id": p.id,
