@@ -1,5 +1,20 @@
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + "=")) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+
 document.addEventListener("alpine:init", () => {
-  //PRODUCTS
+  // PRODUCTS
   Alpine.store("products", {
     all: [],
     searchTerm: "",
@@ -100,6 +115,60 @@ document.addEventListener("alpine:init", () => {
     clear() {
       this.items = [];
       this.save();
+    },
+
+    // -------------------
+    // ORDER STATE + ACTION
+    // -------------------
+    customer: "",
+    comment: "",
+    payment: "Mpesa",
+
+    async placeOrder() {
+      if (!this.items.length) return;
+
+      try {
+        const res = await fetch("/api/orders/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+          },
+          body: JSON.stringify({
+            customer: this.customer,
+            comment: this.comment,
+            payment: this.payment,
+            items: this.items.map(i => ({
+              product: i.id,
+              qty: i.quantity,
+              price: i.price,
+            })),
+            total: this.total,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          this.clear();
+          this.customer = "";
+          this.comment = "";
+          this.payment = "Mpesa";
+
+          document.dispatchEvent(new CustomEvent("toast", {
+            detail: { type: "success", message: data.message }
+          }));
+        } else {
+          document.dispatchEvent(new CustomEvent("toast", {
+            detail: { type: "error", message: data.error || "Error placing order" }
+          }));
+        }
+      } catch (err) {
+        console.error(err);
+        document.dispatchEvent(new CustomEvent("toast", {
+          detail: { type: "error", message: "Something went wrong." }
+        }));
+      }
     },
   });
 });
