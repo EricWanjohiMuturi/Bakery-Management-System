@@ -1,8 +1,10 @@
 from django.shortcuts import render #type: ignore
 from django.http import JsonResponse 
 from products.models import product
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required
 def pos(request):
     if request.htmx:
         return render(request, 'partials/products.html')

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Flavor Haven{% endblock title %}</title>
+    <title>Flavor Haven - {% block title %}{% endblock title %}</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'src/main.css' %}">
@@ -19,7 +19,6 @@
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-    {% bootstrap_messages %}
     {% htmx_script %}
 
     <!-- Font Awesome -->
@@ -30,6 +29,47 @@
 </head>
 <body>
     {% include 'includes/header.html' %}
+    <!-- Messages -->
+    <div class="position-fixed top-0 start-0 p-3" style="z-index:1055; max-width:350px;">
+        {% if messages %}
+            {% for message in messages %}
+                <div 
+                    x-data="{ show: true }" 
+                    x-show="show"
+                    x-transition:enter="transform transition ease-out duration-500"
+                    x-transition:enter-start="-translate-x-full opacity-0"
+                    x-transition:enter-end="translate-x-0 opacity-100"
+                    x-transition:leave="transform transition ease-in duration-500"
+                    x-transition:leave-start="translate-x-0 opacity-100"
+                    x-transition:leave-end="translate-x-full opacity-0"
+                    x-init="setTimeout(() => show = false, 7000)"
+                    class="card shadow border-0 mb-2"
+                >
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <!-- Left: message -->
+                        <div class="d-flex align-items-center gap-2">
+                            {% if message.tags == 'success' %}
+                                <span class="text-success">✔</span>
+                            {% elif message.tags == 'error' %}
+                                <span class="text-danger">✖</span>
+                            {% else %}
+                                <span class="text-primary">ℹ</span>
+                            {% endif %}
+                            <span class="fw-semibold">{{ message }}</span>
+                        </div>
+
+                        <!-- Right: close -->
+                        <button 
+                            type="button" 
+                            class="border-0 bg-transparent fw-bold text-muted ms-2" 
+                            @click="show = false"
+                        >×</button>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <!-- End Messages -->
     <main id="content" class="container px-1">
         {% block content %}{% endblock %}
     </main>    
