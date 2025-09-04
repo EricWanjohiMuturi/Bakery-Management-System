@@ -1,3 +1,19 @@
 <div>
-    <h2 class="text-center fw-bold">All Orders</h2>
+    
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Paid status</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                {% include "partials/order-row.html" %}
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
