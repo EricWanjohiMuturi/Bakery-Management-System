@@ -10,6 +10,10 @@ urlpatterns = [
 
     #APIs
     path("api/products/", products_api, name="products_api"),
-    path("api/orders/", create_order, name="create_order")
+    path("api/orders/", create_order, name="create_order"),
+
+    #Orders
+    path("orders/", order_history, name="order_history"),
+    path("orders/<int:order_id>/update-status/", update_order_status, name="update_order_status"),
 ]
 

@@ -72,6 +72,17 @@
     <!-- End Messages -->
     <main id="content" class="container px-1">
         {% block content %}{% endblock %}
-    </main>    
+    </main> 
+    <form style="display:none;">
+        {% csrf_token %}
+    </form>
+    <script>
+        document.body.addEventListener("htmx:configRequest", (event) => {
+            const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]")?.value;
+            if (csrfToken) {
+            event.detail.headers["X-CSRFToken"] = csrfToken;
+            }
+        });
+    </script>   
 </body>
 </html>

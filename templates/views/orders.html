@@ -3,5 +3,15 @@
 {% block title %}{% endblock title %}
 
 {% block content %}
-{% include 'partials/order-table.html' %}
+<div x-data>
+    <h2 class="text-center fw-bold my-5">All Orders</h2>
+
+    <div id="order-table" 
+         hx-get="{% url 'core:order_history' %}" 
+         hx-trigger="load" 
+         hx-target="#order-table" 
+         hx-swap="innerHTML">
+        <!-- table will load here -->
+    </div>
+</div>
 {% endblock content %}
