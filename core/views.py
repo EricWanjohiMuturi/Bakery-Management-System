@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from products.models import Product, Order
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 # Create your views here.
 @login_required
@@ -27,10 +28,29 @@ def products_api(request):
     return JsonResponse(data, safe=False)
 
 def order_history(request):
-    orders = Order.objects.prefetch_related("items", "items__product").all().order_by("-order_date")
+    # filtering
+    status = request.GET.get("status", "all")  # "paid", "unpaid", or "all"
+    orders = Order.objects.all().order_by("-order_date")
+
+    if status == "paid":
+        orders = orders.filter(paid_status=True)
+    elif status == "unpaid":
+        orders = orders.filter(paid_status=False)
+
+    # pagination
+    paginator = Paginator(orders, 20)  # 20 per page
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "status": status,
+    }
+
     if request.htmx:
-        return render(request, "partials/order-table.html", {"orders": orders})
-    return render(request, "views/orders.html", {"orders": orders})
+        return render(request, "partials/order-table.html", context)
+
+    return render(request, "views/orders.html", context)
 
 @require_POST
 def update_order_status(request, order_id):
