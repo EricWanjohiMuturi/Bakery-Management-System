@@ -3,15 +3,15 @@
 {% block title %}{% endblock title %}
 
 {% block content %}
-<div x-data>
-    <h2 class="text-center fw-bold my-5">All Orders</h2>
+<div class="d-flex justify-content-center align-items-center my-5">
+  <div>
+    <a href="?status=all" class="btn btn-sm {% if status == 'all' %}btn-primary{% else %}btn-outline-primary{% endif %}">All</a>
+    <a href="?status=paid" class="btn btn-sm {% if status == 'paid' %}btn-success{% else %}btn-outline-success{% endif %}">Paid</a>
+    <a href="?status=unpaid" class="btn btn-sm {% if status == 'unpaid' %}btn-danger{% else %}btn-outline-danger{% endif %}">Unpaid</a>
+  </div>
+</div>
 
-    <div id="order-table" 
-         hx-get="{% url 'core:order_history' %}" 
-         hx-trigger="load" 
-         hx-target="#order-table" 
-         hx-swap="innerHTML">
-        <!-- table will load here -->
-    </div>
+<div id="orders-table" hx-get="{% url 'core:order_history' %}?status={{ status }}" hx-trigger="load" hx-target="#orders-table" hx-swap="innerHTML">
+  {% include 'partials/order-table.html' %}
 </div>
 {% endblock content %}

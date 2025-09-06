@@ -1,3 +1,44 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Customer</th>
+      <th>Total</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in page_obj %}
+      {% include "partials/order-row.html" with order=order %}
+    {% empty %}
+      <tr><td colspan="5" class="text-center">No orders found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Pagination -->
+<nav aria-label="Orders pagination">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" hx-get="?page={{ page_obj.previous_page_number }}&status={{ status }}" hx-target="#orders-table" hx-swap="innerHTML">&laquo;</a>
+      </li>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+      <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+        <a class="page-link" hx-get="?page={{ num }}&status={{ status }}" hx-target="#orders-table" hx-swap="innerHTML">{{ num }}</a>
+      </li>
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" hx-get="?page={{ page_obj.next_page_number }}&status={{ status }}" hx-target="#orders-table" hx-swap="innerHTML">&raquo;</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
 <div>
     <table class="table table-bordered table-striped">
         <thead>
